@@ -29,6 +29,7 @@ import com.huawei.hiai.vision.visionkit.common.Frame;
 
 import java.io.File;
 import java.util.Date;
+import java.io.IOException;
 //import java.util.List;
 
 
@@ -125,17 +126,30 @@ public class MainActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            Uri selectedImage = data.getData();
-            String[] pathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, pathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(pathColumn[0]);
-            imagePath = cursor.getString(columnIndex);
-            jsonResTextView.setText(imagePath);
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            barcodeImage.setImageBitmap(bitmap);
-            imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
-            isImageSet = true;
+
+            //Uri selectedImage = data.getData();
+            // Get the intent that started this activity
+            Intent intent = getIntent();
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri imageUri = intent.getData();
+            //String[] pathColumn = {MediaStore.Images.Media.DATA};
+            //Cursor cursor = getContentResolver().query(selectedImage, pathColumn, null, null, null);
+            //cursor.moveToFirst();
+            //int columnIndex = cursor.getColumnIndex(pathColumn[0]);
+            //imagePath = cursor.getString(columnIndex);
+            //jsonResTextView.setText(imagePath);
+            try{
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+                barcodeImage.setImageBitmap(bitmap);
+                imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
+                isImageSet = true;
+            } catch(IOException ioEx) {
+                ioEx.printStackTrace(); // or what ever you want to do with it
+            }
+            //Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            //barcodeImage.setImageBitmap(bitmap);
+            //imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
+            //isImageSet = true;
         }
     }
 
