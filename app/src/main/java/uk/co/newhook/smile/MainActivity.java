@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Build;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Select a image first!",
                             Toast.LENGTH_SHORT).show();
                 } else {
+
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                 Date tempTimeEnd, tempTimeStart;
                                 tempTimeStart = new Date();
                                 JSONObject jsonRes = detector.detect(frame, null);  //detect barcode from the given image
-                                tempTimeEnd = new Date();
+                         requestPermissions();       tempTimeEnd = new Date();
                                 if (jsonRes != null) {
                                     jsonResTextView.setText("Input image file:\n" + imagePath + "\n\nJson Result:\n" + jsonRes.toString() + "\n\nUse Time:\n" + (tempTimeEnd.getTime() - tempTimeStart.getTime()) + "ms;\n\nImage Size:\n" + imageSize);
                                 } else {
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        requestPermissions();
     }
 
 
@@ -155,6 +158,26 @@ public class MainActivity extends AppCompatActivity {
             //imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
             //isImageSet = true;
         }
+    }
+
+    private void requestPermissions(){
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int permission = ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if(permission!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},0x0010);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
