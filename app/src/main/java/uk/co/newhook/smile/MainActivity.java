@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.huawei.hiai.vision.barcode.BarcodeDetector;
 import com.huawei.hiai.vision.common.VisionBase;
 //import com.huawei.hiai.vision.visionkit.barcode.Barcode;
 import com.huawei.hiai.vision.visionkit.common.Frame;
+import com.huawei.hiai.vision.common.ConnectionCallback;
 
 import java.io.File;
 import java.util.Date;
@@ -134,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
             //Intent intent = getIntent();
             //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             //Uri imageUri = Uri.parse(intent.toUri(URI_INTENT_SCHEME));
-            //String[] pathColumn = {MediaStore.Images.Media.DATA};
-            //Cursor cursor = getContentResolver().query(selectedImage, pathColumn, null, null, null);
-            //cursor.moveToFirst();
-            //int columnIndex = cursor.getColumnIndex(pathColumn[0]);
-            //imagePath = cursor.getString(columnIndex);
-            //jsonResTextView.setText(imagePath);
+            String[] pathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, pathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(pathColumn[0]);
+            imagePath = cursor.getString(columnIndex);
+            jsonResTextView.setText(imagePath);
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
                 barcodeImage.setImageBitmap(bitmap);
