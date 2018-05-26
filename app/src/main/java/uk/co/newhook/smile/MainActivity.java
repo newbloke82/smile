@@ -30,6 +30,8 @@ import com.huawei.hiai.vision.visionkit.common.Frame;
 import java.io.File;
 import java.util.Date;
 import java.io.IOException;
+
+import static android.content.Intent.URI_INTENT_SCHEME;
 //import java.util.List;
 
 
@@ -127,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            //Uri selectedImage = data.getData();
+            Uri selectedImage = data.getData();
             // Get the intent that started this activity
-            Intent intent = getIntent();
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri imageUri = intent.getData();
+            //Intent intent = getIntent();
+            //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            //Uri imageUri = Uri.parse(intent.toUri(URI_INTENT_SCHEME));
             //String[] pathColumn = {MediaStore.Images.Media.DATA};
             //Cursor cursor = getContentResolver().query(selectedImage, pathColumn, null, null, null);
             //cursor.moveToFirst();
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             //imagePath = cursor.getString(columnIndex);
             //jsonResTextView.setText(imagePath);
             try{
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
                 barcodeImage.setImageBitmap(bitmap);
                 imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
                 isImageSet = true;
