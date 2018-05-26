@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject jsonRes = detector.detect(frame, null);  //detect barcode from the given image
                                 tempTimeEnd = new Date();
                                 if (jsonRes != null) {
-                                    jsonResTextView.setText("Imput image file:\n" + imagePath + "\n\nJson Result:\n" + jsonRes.toString() + "\n\nUse Time:\n" + (tempTimeEnd.getTime() - tempTimeStart.getTime()) + "ms;\n\nImage Size:\n" + imageSize);
+                                    jsonResTextView.setText("Input image file:\n" + imagePath + "\n\nJson Result:\n" + jsonRes.toString() + "\n\nUse Time:\n" + (tempTimeEnd.getTime() - tempTimeStart.getTime()) + "ms;\n\nImage Size:\n" + imageSize);
                                 } else {
                                     jsonResTextView.setText("No barcode detected!");
                                 }
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(pathColumn[0]);
             imagePath = cursor.getString(columnIndex);
+            jsonResTextView.setText(imagePath);
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             barcodeImage.setImageBitmap(bitmap);
             imageSize = bitmap.getWidth() + " * " + bitmap.getHeight() + ".";
